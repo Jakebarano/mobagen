@@ -16,6 +16,34 @@ Vector2f SeparationRule::computeForce(const std::vector<Boid*>& neighborhood, Bo
   //        // todo: find and apply force only on the closest mates
   //    }
 
+
+  int countCloseFlockmates = 0;
+  Vector2f pos = Vector2f::zero();
+
+  if(!neighborhood.empty())
+  {
+    pos = boid->getPosition();
+
+    for (int i = 0; i < neighborhood.size(); ++i) {
+      // Gets the postions of the neighbors and find the difference in distance to calculate
+      // force stremgth?
+
+      Vector2f neighborPos = neighborhood[i]->getPosition();
+      auto diffVector = boid->getPosition() - neighborPos;
+      auto distance = diffVector.getMagnitude();
+
+      if(distance < desiredMinimalDistance)
+      {
+        auto hatVect = diffVector.normalized();
+        separatingForce += hatVect/distance;
+        countCloseFlockmates++;
+      }
+    }
+    if(countCloseFlockmates != 0)
+    {
+      separatingForce /= countCloseFlockmates;
+    }
+  }
   separatingForce = Vector2f::normalized(separatingForce);
 
   return separatingForce;

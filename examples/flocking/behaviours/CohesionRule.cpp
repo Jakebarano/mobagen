@@ -6,8 +6,8 @@ Vector2f CohesionRule::computeForce(const std::vector<Boid*>& neighborhood, Boid
   // todo: add your code here to make a force towards the center of mass
   // hint: iterate over the neighborhood
 
-  Vector2f cohesionForce;
-  Vector2f posSum;
+  Vector2f cohesionForce = {0, 0};
+  Vector2f posSum = {0, 0};
   Vector2f PosCenter = {0,0};
 
   if (!neighborhood.empty())
@@ -22,6 +22,5 @@ Vector2f CohesionRule::computeForce(const std::vector<Boid*>& neighborhood, Boid
 
   // find center of mass
 
-
-  return distVect;
+  return distVect.normalized();
 }
