@@ -7,12 +7,30 @@ Vector2f BoundedAreaRule::computeForce(const std::vector<Boid*>& neighborhood, B
   // Return a force proportional to the proximity of the boids with the bounds, and opposed to it
   Vector2f force = Vector2f::zero();  // zero
 
+  //float REVERSEVELOCITY = 1.0f;
   // todo: add here your code here do make the boid follow the bounded box rule
   // hint: use this->world->engine->window->size() and desiredDistance
 
-  auto windowSize = this->world->engine->window->size().x < desiredDistance;
+  Vector2f boundsDiff = Vector2f(desiredDistance, desiredDistance);
 
-  return force;
+  Vector2f windowSize = Vector2f(this->world->engine->window->size().x, this->world->engine->window->size().y);
+
+  Vector2f  boundedArea = windowSize - boundsDiff;
+
+  if(boid->getPosition().x > boundedArea.x)
+  {
+    boid->setVelocity(boid->getVelocity() *= -1.0);
+
+    // reverses the velocity if the positions on the Axis are greater than the area.
+    // this approach has issue with boids at edge since the bounds starts at 20, leads to issues with the flocks as well.
+
+  }
+  else if (boid->getPosition().y > boundedArea.y)
+  {
+    boid->setVelocity(boid->getVelocity() *= -1.0);
+  }
+
+  return boid->getVelocity();
 }
 
 bool BoundedAreaRule::drawImguiRuleExtra() {
