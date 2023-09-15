@@ -2,27 +2,25 @@
 
 // Reference: https://playgameoflife.com/info
 void JohnConway::Step(World& world) {
-  for (int i = 0; i < world.SideSize() ; ++i)
+
+  for (int y = 0; y < world.SideSize() ; ++y)
   {
-    for (int j = 0; j < world.SideSize() ; ++j)
+    for (int x = 0; x < world.SideSize() ; ++x)
     {
+      int neighbors = CountNeighbors(world, {x, y});
 
-      auto currentCell = Point2D(i, j);
-      int neighbors = CountNeighbors(world, currentCell);
-
-      //if ( currentCell.Con() == 1 && neighbors < 2 || neighbors > 3) //checks if cell has too few neighbors and dies.
+      if ( world.Get({x, y}) && (neighbors <= 1 || neighbors > 3)) //checks if cell has too few/many neighbors and dies.
       {
-        //dead();
+        world.SetNext({x, y}, false);
+      }
+      else if (world.Get({x, y}) && (neighbors == 2 || neighbors == 3))  //checks if the cell is alive and has enough neighbors to live.
+      {
+        world.SetNext({x, y}, true);
       }
 
-      //if ((currentCell.Con() == 1 && neighbors > 1) || (currentCell.Con() == 1 && neighbors < 4))  //checks if the cell is alive and has enough neighbors to live.
+      else if (!world.Get({x, y}) && neighbors == 3) //checks if cell is dead but has enough neighbors to become alive.
       {
-        //live();
-      }
-
-      //if (currentCell.Con() == 0 && neighbors == 3) //checks if cell is dead but has enough neighbors to become alive.
-      {
-        //live();
+        world.SetNext({x, y}, true);
       }
     }
   }
@@ -31,18 +29,15 @@ void JohnConway::Step(World& world) {
 int JohnConway::CountNeighbors(World& world, Point2D point) {
   int cellNeighbors = 0;
 
-  // probably a nested for loop checking the [8] neighbor positions around the current cell and returning # alive.
-  // for(int i = 0; i < world.SideSize() ; ++i)  //sub out world.SideSize() for however you calc. the neighbor positions.
+  for(int y = point.y -1 ; y <= point.y + 1; y++)
   {
-    // for (int j = 0; j < world.SideSize() ; ++j)
+    for (int x = point.x - 1; x <= point.x + 1 ; x++)
     {
-      // if ( CCN[i][j] == live)
-      //{
-      //   cellNeighbors++;
-      // }
+      if (x != 0 && y != 0 && world.Get({point.x + x, point.y + y}))
+      {
+        cellNeighbors++;
+      }
     }
   }
-  // TODO: Question to Ask: Are we supposed to create more functionality outside of this file? (ie. live var for each point, etc)?
-
   return cellNeighbors;
 }
