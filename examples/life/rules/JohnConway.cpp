@@ -3,24 +3,37 @@
 // Reference: https://playgameoflife.com/info
 void JohnConway::Step(World& world) {
 
-  for (int y = 0; y < world.SideSize() ; ++y)
+  for (int y = 0; y < world.SideSize() ; y++)
   {
-    for (int x = 0; x < world.SideSize() ; ++x)
+    for (int x = 0; x < world.SideSize() ; x++)
     {
       int neighbors = CountNeighbors(world, {x, y});
+      bool isAlive = world.Get({x, y});
+      world.SetNext({x,y}, isAlive);
 
-      if (world.Get({x, y}) == false && neighbors == 3) //checks if cell is dead but has enough neighbors to become alive.
+      if (isAlive)
       {
-        world.SetNext({x, y}, true);
+        if (neighbors <= 1 || neighbors >= 4)
+        {
+          world.SetNext({x,y}, false);
+        }
+
+        if (neighbors == 2 || neighbors == 3) //TODO: check if is needed
+        {
+          world.SetNext({x,y}, isAlive);
+        }
+
       }
-      else if ((world.Get({x, y}) == true && neighbors == 1) || (world.Get({x, y}) == true && neighbors >= 4))
+      else
       {
-        world.SetNext({x, y}, false);
+        if (neighbors == 3)
+        {
+          world.SetNext({x, y}, true);
+        }
       }
-      else if ((world.Get({x, y}) == true && neighbors == 3) || (world.Get({x, y}) == true && neighbors == 2))
-      {
-        world.SetNext({x, y}, true);
-      }
+
+
+
 
       /*else if ( world.Get({x, y}) == true && (neighbors < 2 || neighbors > 3)) //checks if cell has too few/many neighbors and dies.
       {
@@ -35,17 +48,5 @@ void JohnConway::Step(World& world) {
 }
 
 int JohnConway::CountNeighbors(World& world, Point2D point) {
-  int cellNeighbors = 0;
-
-  for(int y = point.y -1 ; y <= point.y + 1; y++)
-  {
-    for (int x = point.x - 1; x <= point.x + 1 ; x++)
-    {
-      if (x != 0 && y != 0 && world.Get({x, y}))
-      {
-        cellNeighbors++;
-      }
-    }
-  }
-  return cellNeighbors;
+  return world.Get(point.Up()) + world.Get(point.Up().Left()) + world.Get(point.Up().Right()) + world.Get(point.Left()) + world.Get(point.Right()) + world.Get(point.Down().Left()) + world.Get(point.Down())+ world.Get(point.Down().Right());
 }
