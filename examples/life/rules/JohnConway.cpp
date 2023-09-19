@@ -18,10 +18,10 @@ void JohnConway::Step(World& world) {
           world.SetNext({x,y}, false);
         }
 
-        if (neighbors == 2 || neighbors == 3) //TODO: check if is needed
+        /* if (neighbors == 2 || neighbors == 3) //TODO: check if is needed
         {
           world.SetNext({x,y}, isAlive);
-        }
+        }*/
 
       }
       else
