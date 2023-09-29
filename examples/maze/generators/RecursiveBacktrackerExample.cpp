@@ -2,9 +2,31 @@
 #include "Random.h"
 #include "RecursiveBacktrackerExample.h"
 #include <climits>
+
+using namespace std;
+
 bool RecursiveBacktrackerExample::Step(World* w) {
   //TODO: YOUR CODE HERE
 
+  Point2D start  = randomStartPoint(w);
+ stack.push_back(start);
+  while (!stack.empty()) {
+    Point2D currentP = *stack.begin();
+    stack.pop_back();
+
+    if (visited.size() >= w->GetSize())
+    {
+
+    }
+
+    vector<Point2D> neighbors = getVisitables(w, currentP);
+
+    for(auto nextP = neighbors.begin(); nextP != neighbors.end(); ++nextP) {
+      
+    }
+  }
+
+  return true;
 }
 
 void RecursiveBacktrackerExample::Clear(World* world) {
