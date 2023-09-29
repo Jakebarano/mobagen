@@ -9,9 +9,9 @@ bool RecursiveBacktrackerExample::Step(World* w) {
   //TODO: YOUR CODE HERE
 
   Point2D start  = randomStartPoint(w);
- stack.push_back(start);
+  stack.push_back(start);
   while (!stack.empty()) {
-    Point2D currentP = *stack.begin();
+    Point2D currentP = stack[stack.size()-1];
     stack.pop_back();
 
     if (visited.size() >= w->GetSize())
@@ -22,7 +22,7 @@ bool RecursiveBacktrackerExample::Step(World* w) {
     vector<Point2D> neighbors = getVisitables(w, currentP);
 
     for(auto nextP = neighbors.begin(); nextP != neighbors.end(); ++nextP) {
-      
+
     }
   }
 
