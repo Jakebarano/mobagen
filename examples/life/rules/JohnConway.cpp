@@ -18,11 +18,10 @@ void JohnConway::Step(World& world) {
           world.SetNext({x,y}, false);
         }
 
-        /* if (neighbors == 2 || neighbors == 3) //TODO: check if is needed
+        /* if (neighbors == 2 || neighbors == 3) //This test case is unnecessary
         {
           world.SetNext({x,y}, isAlive);
         }*/
-
       }
       else
       {
@@ -31,18 +30,6 @@ void JohnConway::Step(World& world) {
           world.SetNext({x, y}, true);
         }
       }
-
-
-
-
-      /*else if ( world.Get({x, y}) == true && (neighbors < 2 || neighbors > 3)) //checks if cell has too few/many neighbors and dies.
-      {
-        world.SetNext({x, y}, false);
-      }
-      if (world.Get({x, y}) && (neighbors == 2 || neighbors == 3))  //checks if the cell is alive and has enough neighbors to live.
-      {
-        world.SetNext({x, y}, true);
-      }*/
     }
   }
 }
