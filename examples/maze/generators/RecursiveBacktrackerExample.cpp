@@ -8,15 +8,14 @@ using namespace std;
 bool RecursiveBacktrackerExample::Step(World* w) {
   //TODO: YOUR CODE HERE
 
-  Point2D start  = randomStartPoint(w);
+  Point2D start  = randomStartPoint(w); //can start as 0,0
   stack.push_back(start);
   while (!stack.empty()) {
     Point2D currentP = stack[stack.size()-1];
     stack.pop_back();
 
-    if (visited.size() >= w->GetSize())
+    if (w->GetNode(start).GetVisited())  //should check for availability of tiles for backtracking
     {
-
     }
 
     vector<Point2D> neighbors = getVisitables(w, currentP);

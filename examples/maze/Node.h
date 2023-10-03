@@ -14,6 +14,7 @@ public:
 
 private:
   uint8_t data;
+  bool visited = false;
 
 public:
   // todo: can you improve this?
@@ -22,12 +23,16 @@ public:
   bool inline GetSouth() const { return data >> 2U & 1U; };
   bool inline GetWest() const { return data >> 3U & 1U; };
 
+  bool inline GetVisited() const {return visited; };
+
   // todo set
   // todo: can you improve this?
   void inline SetNorth(bool x) { data = (data & ~(1 << 0)) | x << 0; };
   void inline SetEast(bool x) { data = (data & ~(1 << 1)) | x << 1; };
   void inline SetSouth(bool x) { data = (data & ~(1 << 2)) | x << 2; };
   void inline SetWest(bool x) { data = (data & ~(1 << 3)) | x << 3; };
+
+  void inline SetVisit(bool v) { visited = true; };
 };
 
 #endif  // MOBAGEN_NODE_H
