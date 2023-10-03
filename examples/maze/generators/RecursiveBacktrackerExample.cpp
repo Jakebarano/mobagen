@@ -5,25 +5,34 @@
 
 using namespace std;
 
+Color32 white(0,0,0,255);
+Color32 red(255,0,0,255);
+
 bool RecursiveBacktrackerExample::Step(World* w) {
   //TODO: YOUR CODE HERE
 
-  Point2D start  = randomStartPoint(w); //can start as 0,0
-  stack.push_back(start);
-  while (!stack.empty()) {
+  if (stack.empty()) {
+    Point2D start = randomStartPoint(w);  // can start as 0,0
+    stack.push_back(start);
+  }
+
     Point2D currentP = stack[stack.size()-1];
     stack.pop_back();
 
-    if (w->GetNode(start).GetVisited())  //should check for availability of tiles for backtracking
+    if (!w->GetNode(currentP).GetVisited())  //should check for availability of tiles for backtracking
     {
+      visited[currentP.x][currentP.y] = true;
+      w->GetNode(currentP).SetVisit(true);
+      w->SetNodeColor(currentP, red);
     }
 
     vector<Point2D> neighbors = getVisitables(w, currentP);
 
-    for(auto nextP = neighbors.begin(); nextP != neighbors.end(); ++nextP) {
 
-    }
-  }
+
+    //for(auto nextP = neighbors.begin(); nextP != neighbors.end(); ++nextP) {
+    //
+    //}
 
   return true;
 }
@@ -52,6 +61,23 @@ Point2D RecursiveBacktrackerExample::randomStartPoint(World* world) {
 std::vector<Point2D> RecursiveBacktrackerExample::getVisitables(World* w, const Point2D& p) {
   auto sideOver2 = w->GetSize() / 2;
   std::vector<Point2D> visitables;
+
+  if(w->GetNorth(p))
+  {
+    visitables.push_back(p.Up());
+  }
+  if(w->GetSouth(p))
+  {
+    visitables.push_back(p.Down());
+  }
+  if(w->GetEast(p))
+  {
+    visitables.push_back(p.Right());
+  }
+  if(w->GetWest(p))
+  {
+    visitables.push_back(p.Left());
+  }
 
   return visitables;
 }
