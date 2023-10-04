@@ -5,16 +5,6 @@
 
 using namespace std;
 
-Color32 white(0,0,0,255);
-Color32 red(255,0,0,255);
-
-enum class Directions {
-  up,
-  down,
-  left,
-  right,
-};
-
 void breakWall(World* w, Point2D origin, Point2D target)
 {
   auto delta = target - origin;
