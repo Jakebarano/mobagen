@@ -5,28 +5,6 @@
 
 using namespace std;
 
-void breakWall(World* w, Point2D origin, Point2D target)
-{
-  auto delta = target - origin;
-  if (delta.y <= -1)
-  {
-    w->SetNorth(origin.Up(), false);
-  }
-  if(delta.y >= 1)
-  {
-      w->SetSouth(origin.Down(), false);
-  }
-  if (delta.x <= -1)
-  {
-      w->SetWest(origin.Left(), false);
-  }
-  if (delta.x >= 1)
-  {
-      w->SetEast(origin.Right(), false);
-  }
-}
-
-
 bool RecursiveBacktrackerExample::Step(World* w) {
   // TODO: YOUR CODE HERE
   auto start = randomStartPoint(w);
@@ -96,6 +74,27 @@ Point2D RecursiveBacktrackerExample::randomStartPoint(World* world) {
     for (int x = -sideOver2; x <= sideOver2; x++)
       if (!visited[y][x]) return {x, y};
   return {INT_MAX, INT_MAX};
+}
+
+void RecursiveBacktrackerExample::breakWall(World* w, Point2D origin, Point2D target)
+{
+  auto delta = target - origin;
+  if (delta.y <= -1)
+  {
+    w->SetNorth(origin.Up(), false);
+  }
+  if(delta.y >= 1)
+  {
+    w->SetSouth(origin.Down(), false);
+  }
+  if (delta.x <= -1)
+  {
+    w->SetWest(origin.Left(), false);
+  }
+  if (delta.x >= 1)
+  {
+    w->SetEast(origin.Right(), false);
+  }
 }
 
 std::vector<Point2D> RecursiveBacktrackerExample::getVisitables(World* w, const Point2D& p) {
