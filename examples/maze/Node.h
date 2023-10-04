@@ -23,7 +23,7 @@ public:
   bool inline GetSouth() const { return data >> 2U & 1U; };
   bool inline GetWest() const { return data >> 3U & 1U; };
 
-  bool inline GetVisited() const {return visited; };
+  //bool inline GetVisited() const {return visited; };
 
   // todo set
   // todo: can you improve this?
@@ -32,7 +32,7 @@ public:
   void inline SetSouth(bool x) { data = (data & ~(1 << 2)) | x << 2; };
   void inline SetWest(bool x) { data = (data & ~(1 << 3)) | x << 3; };
 
-  void inline SetVisit(bool v) { visited = true; };
+  //void inline SetVisit(bool v) { visited = true; };
 };
 
 #endif  // MOBAGEN_NODE_H

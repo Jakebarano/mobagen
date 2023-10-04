@@ -8,34 +8,84 @@ using namespace std;
 Color32 white(0,0,0,255);
 Color32 red(255,0,0,255);
 
-bool RecursiveBacktrackerExample::Step(World* w) {
-  //TODO: YOUR CODE HERE
+enum class Directions {
+  up,
+  down,
+  left,
+  right,
+};
 
-  if (stack.empty()) {
-    Point2D start = randomStartPoint(w);  // can start as 0,0
-    stack.push_back(start);
+void breakWall(World* w, Point2D origin, Point2D target)
+{
+  auto delta = target - origin;
+  if (delta.y <= -1)
+  {
+    w->SetNorth(origin.Up(), false);
+  }
+  if(delta.y >= 1)
+  {
+      w->SetSouth(origin.Down(), false);
+  }
+  if (delta.x <= -1)
+  {
+      w->SetWest(origin.Left(), false);
+  }
+  if (delta.x >= 1)
+  {
+      w->SetEast(origin.Right(), false);
+  }
+}
+
+
+bool RecursiveBacktrackerExample::Step(World* w) {
+  // TODO: YOUR CODE HERE
+  auto start = randomStartPoint(w);
+
+  if (stack.empty() && start == Point2D{INT_MAX, INT_MAX}) {
+    return false;
   }
 
-    Point2D currentP = stack[stack.size()-1];
+  if (stack.empty())
+  {
+    stack.push_back(start);
+    return true;
+  }
+
+  Point2D currentP = stack[stack.size() - 1];
+    visited[currentP.x][currentP.y] = true;
+    w->SetNodeColor(currentP, Color::Yellow);
+
+  auto neighbors = getVisitables(w, currentP);
+
+  if(neighbors.empty())
+  {
     stack.pop_back();
-
-    if (!w->GetNode(currentP).GetVisited())  //should check for availability of tiles for backtracking
-    {
-      visited[currentP.x][currentP.y] = true;
-      w->GetNode(currentP).SetVisit(true);
-      w->SetNodeColor(currentP, red);
-    }
-
-    vector<Point2D> neighbors = getVisitables(w, currentP);
-
-
-
-    //for(auto nextP = neighbors.begin(); nextP != neighbors.end(); ++nextP) {
-    //
-    //}
-
-  return true;
+    w->SetNodeColor(currentP, Color::Black);
+    return true;
+  }
+  else if (neighbors.size() == 1)
+  {
+    //no need for random
+    breakWall(w, currentP, neighbors[0]);
+    stack.push_back(neighbors[0]);
+    visited[neighbors[0].x][neighbors[0].y] = true;
+    w->SetNodeColor(neighbors[0], Color::Tomato);
+    return true;
+  }
+  else if (neighbors.size() > 1)
+  {
+    int randChoice = Random::Range(0, neighbors.size()-1);
+    breakWall(w, currentP, neighbors[randChoice]);
+    stack.push_back(neighbors[randChoice]);
+    visited[neighbors[randChoice].x][neighbors[randChoice].y] = true;
+    w->SetNodeColor(neighbors[randChoice], Color::Tomato);
+    return true;
+  }
+  // for(auto nextP = neighbors.begin(); nextP != neighbors.end(); ++nextP) {
+  //
+  // }
 }
+
 
 void RecursiveBacktrackerExample::Clear(World* world) {
   visited.clear();
@@ -62,22 +112,21 @@ std::vector<Point2D> RecursiveBacktrackerExample::getVisitables(World* w, const 
   auto sideOver2 = w->GetSize() / 2;
   std::vector<Point2D> visitables;
 
-  if(w->GetNorth(p))
+  if(p.y > -sideOver2 && !visited[p.x][p.y - 1])
   {
     visitables.push_back(p.Up());
   }
-  if(w->GetSouth(p))
+  if(p.y <= sideOver2 && !visited[p.x][p.y + 1])
   {
     visitables.push_back(p.Down());
   }
-  if(w->GetEast(p))
+  if(p.x <= sideOver2 && !visited[p.x + 1][p.y])
   {
     visitables.push_back(p.Right());
   }
-  if(w->GetWest(p))
+  if(p.x > -sideOver2 && !visited[p.x - 1][p.y])
   {
     visitables.push_back(p.Left());
   }
-
   return visitables;
 }
