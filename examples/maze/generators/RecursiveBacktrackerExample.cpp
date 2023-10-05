@@ -7,6 +7,7 @@ using namespace std;
 
 bool RecursiveBacktrackerExample::Step(World* w) {
   // TODO: YOUR CODE HERE
+  //Point2D Center = {0, 0};
   auto start = randomStartPoint(w);
 
   if (stack.empty() && start == Point2D{INT_MAX, INT_MAX}) {
@@ -19,7 +20,7 @@ bool RecursiveBacktrackerExample::Step(World* w) {
     return true;
   }
 
-  Point2D currentP = stack[stack.size() - 1];
+  Point2D currentP = stack.back();
     visited[currentP.x][currentP.y] = true;
     w->SetNodeColor(currentP, Color::Yellow);
 
@@ -36,22 +37,21 @@ bool RecursiveBacktrackerExample::Step(World* w) {
     //no need for random
     breakWall(w, currentP, neighbors[0]);
     stack.push_back(neighbors[0]);
-    visited[neighbors[0].x][neighbors[0].y] = true;
     w->SetNodeColor(neighbors[0], Color::Tomato);
+    visited[neighbors[0].x][neighbors[0].y] = true;
     return true;
   }
   else if (neighbors.size() > 1)
   {
     int randChoice = Random::Range(0, neighbors.size()-1);
-    breakWall(w, currentP, neighbors[randChoice]);
-    stack.push_back(neighbors[randChoice]);
-    visited[neighbors[randChoice].x][neighbors[randChoice].y] = true;
-    w->SetNodeColor(neighbors[randChoice], Color::Tomato);
+    Point2D nextP = neighbors[randChoice];
+    breakWall(w, currentP, nextP);
+    stack.push_back(nextP);
+    visited[nextP.x][nextP.y] = true;
+    w->SetNodeColor(nextP, Color::Tomato);
+    visited[nextP.x][nextP.y] = true;
     return true;
   }
-  // for(auto nextP = neighbors.begin(); nextP != neighbors.end(); ++nextP) {
-  //
-  // }
 }
 
 
@@ -78,22 +78,24 @@ Point2D RecursiveBacktrackerExample::randomStartPoint(World* world) {
 
 void RecursiveBacktrackerExample::breakWall(World* w, Point2D origin, Point2D target)
 {
+  auto sideOver2 = w->GetSize() / 2;
   auto delta = target - origin;
-  if (delta.y <= -1)
+
+  if (delta.y <= -1 && target.y >= -sideOver2)
   {
-    w->SetNorth(origin.Up(), false);
+    w->SetNorth(target.Down(), false);
   }
-  if(delta.y >= 1)
+  if (delta.y >= 1 && target.y <= sideOver2)
   {
-    w->SetSouth(origin.Down(), false);
+    w->SetSouth(target.Up(), false);
   }
-  if (delta.x <= -1)
+  if (delta.x <= -1 && target.x >= -sideOver2)
   {
-    w->SetWest(origin.Left(), false);
+    w->SetWest(target.Right(), false);
   }
-  if (delta.x >= 1)
+  if (delta.x >= 1 && target.x <= sideOver2)
   {
-    w->SetEast(origin.Right(), false);
+    w->SetEast(target.Left(), false);
   }
 }
 
@@ -105,11 +107,11 @@ std::vector<Point2D> RecursiveBacktrackerExample::getVisitables(World* w, const 
   {
     visitables.push_back(p.Up());
   }
-  if(p.y <= sideOver2 && !visited[p.x][p.y + 1])
+  if(p.y < sideOver2 && !visited[p.x][p.y + 1])
   {
     visitables.push_back(p.Down());
   }
-  if(p.x <= sideOver2 && !visited[p.x + 1][p.y])
+  if(p.x < sideOver2 && !visited[p.x + 1][p.y])
   {
     visitables.push_back(p.Right());
   }
