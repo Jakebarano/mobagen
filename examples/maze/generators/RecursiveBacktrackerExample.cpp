@@ -49,7 +49,6 @@ bool RecursiveBacktrackerExample::Step(World* w) {
     stack.push_back(nextP);
     visited[nextP.x][nextP.y] = true;
     w->SetNodeColor(nextP, Color::Tomato);
-    visited[nextP.x][nextP.y] = true;
     return true;
   }
 }
