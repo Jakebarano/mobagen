@@ -7,7 +7,7 @@
 using namespace std;
 
 Point2D Cat::Move(World* world) {
-  auto rand = Random::Range(0, 5); //change out for
+  /*auto rand = Random::Range(0, 5); //change out for
   auto pos = world->getCat();
 
   switch (rand) {
@@ -25,19 +25,33 @@ Point2D Cat::Move(World* world) {
       return World::SE(pos);
     default:
       throw "random out of range";
+  }*/
+
+  queue<Point2D> frontier;
+
+  frontier.push(world->getCat());
+  // map came_from = dict() # path A->B is stored as came_from[B] == A
+  //  Dictionary to store the mapping from nodes to their predecessors
+
+  map<int, int> came_from;
+
+  // came_from[(world->getCat().x, world->getCat().y)] = -1;
+
+  while (!frontier.empty()) {
+    Point2D current = frontier.front();
+    frontier.pop();
+
+    if (world->catWinsOnSpace(current)) {
+      break;
+    }
+
+    vector<Point2D> neighbors = world->neighbors(current);
+
+    for (auto next : neighbors) {
+      if (came_from.find((next.x, next.y)) == came_from.end() && world->getContent(next) == 0) {
+        frontier.push(next);
+        came_from[(next.x, next.y)] = (current.x, current.y);
+      }
+    }
   }
-
-queue<Point2D> frontier;
-
-frontier.push(world->getCat());
-map came_from = dict() # path A->B is stored as came_from[B] == A
-came_from[start] = None
-
-while not frontier.empty():
- current = frontier.get()
- for next in graph.neighbors(current):
-    if next not in came_from:
-       frontier.put(next)
-       came_from[next] = current
-
 }
