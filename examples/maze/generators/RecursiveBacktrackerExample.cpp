@@ -6,8 +6,7 @@
 using namespace std;
 
 bool RecursiveBacktrackerExample::Step(World* w) {
-  // TODO: YOUR CODE HERE
-  //Point2D Center = {0, 0};
+
   auto start = randomStartPoint(w);
 
   if (stack.empty() && start == Point2D{INT_MAX, INT_MAX}) {
@@ -21,9 +20,8 @@ bool RecursiveBacktrackerExample::Step(World* w) {
   }
 
   Point2D currentP = stack.back();
-    visited[currentP.x][currentP.y] = true;
-    w->SetNodeColor(currentP, Color::Yellow);
-
+  visited[currentP.x][currentP.y] = true;
+  w->SetNodeColor(currentP, Color::Yellow);
   auto neighbors = getVisitables(w, currentP);
 
   if(neighbors.empty())

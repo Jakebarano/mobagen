@@ -29,7 +29,8 @@ std::vector<Point2D> Agent::generatePath(World* w) {
     const vector<Point2D> neighbors = w->neighbors(current);
 
     for (auto next : neighbors) {
-      if (!visited[next] && next != catPos && !w->getContent(next) && !frontierSet.contains(next)) {
+      if (!visited[next] && next != catPos && !w->getContent(next) && !frontierSet.contains(next))
+      {
         frontier.push(next);
         frontierSet.insert(next);
         cameFrom[next] = current;
@@ -40,10 +41,9 @@ std::vector<Point2D> Agent::generatePath(World* w) {
           break;
         }
       }
-
     }
   }
-  vector<Point2D> path;   // need to compile path form cameFrom and return path;
+  vector<Point2D> path;   //compile path form cameFrom and return it.
 
   current = exitPoint;
 
