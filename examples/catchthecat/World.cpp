@@ -193,6 +193,7 @@ void World::step() {
   // run the turn
   if (catTurn) {
     auto move = cat->Move(this);
+    std::cout << move.x << "," << move.y << "\n";
     if (catCanMoveToPosition(move)) {
       catPosition = move;
       catWon = catWinVerification();
