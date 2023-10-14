@@ -200,6 +200,7 @@ void World::step() {
     } else {
       isSimulating = false;
       catcherWon = true;  // cat made a bad move
+      std::cout << "Cat made illegal move" << std::endl;
     }
   } else {
     auto move = catcher->Move(this);
@@ -209,6 +210,7 @@ void World::step() {
     } else {
       isSimulating = false;
       catWon = true;  // catcher made a bad move
+      std::cout << "Catcher made illegal move" << std::endl;
     }
   }
   auto stop = std::chrono::high_resolution_clock::now();

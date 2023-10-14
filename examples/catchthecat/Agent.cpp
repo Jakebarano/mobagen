@@ -43,6 +43,11 @@ std::vector<Point2D> Agent::generatePath(World* w) {
       }
     }
   }
+
+  if (exitPoint == Point2D(INT_MAX, INT_MAX)) {
+    return {};  // Return an empty path
+  }
+
   vector<Point2D> path;   //compile path form cameFrom and return it.
 
   current = exitPoint;
