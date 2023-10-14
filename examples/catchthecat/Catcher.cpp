@@ -1,6 +1,8 @@
 #include "Catcher.h"
 #include "World.h"
 #include <vector>
+#include <unordered_set>
+
 Point2D Catcher::Move(World* world) {
 
   auto path = generatePath(world);
@@ -10,42 +12,69 @@ Point2D Catcher::Move(World* world) {
     return path[0];
   }
   else {
-        auto rand = Random::Range(0, 5); //change out for
-        auto pos = world->getCat();
 
-        std::vector<Point2D> neighbors = world->neighbors(pos);
-          switch (rand) {
-            case 0:
-              if (!world->getContent(World::NE(pos)) && world->isValidPosition(World::NE(pos))) {
-                return World::NE(pos);
-              }
-              break;
-            case 1:
-              if (!world->getContent(World::NW(pos)) && world->isValidPosition(World::NW(pos))) {
-                return World::NW(pos);
-              }
-              break;
-            case 2:
-              if (!world->getContent(World::E(pos)) && world->isValidPosition(World::E(pos))) {
-                return World::E(pos);
-              }
-              break;
-            case 3:
-              if (!world->getContent(World::W(pos)) && world->isValidPosition(World::W(pos))) {
-                return World::W(pos);
-              }
-              break;
-            case 4:
-              if (!world->getContent(World::SW(pos)) && world->isValidPosition(World::SE(pos))) {
-                return World::SW(pos);
-              }
-              break;
-            case 5:
-              if (!world->getContent(World::SE(pos)) && world->isValidPosition(World::SE(pos))) {
-                return World::SE(pos);
-              }
-              break;
-          }
+    auto pos = world->getCat();
+    auto neighbors = world->neighbors(pos);
+    std::unordered_set<Point2D> availableNeighbors (neighbors.begin(), neighbors.end());
+
+    while(!availableNeighbors.empty())
+    {
+      for(auto next : neighbors)
+      {
+        if(world->getContent(next))
+        {
+          availableNeighbors.erase(next);
+        }
+      }
+
+      auto rand = Random::Range(0, availableNeighbors.size()-1);
+
+      for(auto it = availableNeighbors.begin(); it != availableNeighbors.end(); it++)
+      {
+        if (rand == 0)
+        {
+          return *it;
+        }
+        rand--;
+      }
+    }
+
+//        auto rand = Random::Range(0, 5); //change out for
+//        auto pos = world->getCat();
+//
+//        std::vector<Point2D> neighbors = world->neighbors(pos);
+//          switch (rand) {
+//            case 0:
+//              if (!world->getContent(World::NE(pos)) && world->isValidPosition(World::NE(pos))) {
+//                return World::NE(pos);
+//              }
+//              break;
+//            case 1:
+//              if (!world->getContent(World::NW(pos)) && world->isValidPosition(World::NW(pos))) {
+//                return World::NW(pos);
+//              }
+//              break;
+//            case 2:
+//              if (!world->getContent(World::E(pos)) && world->isValidPosition(World::E(pos))) {
+//                return World::E(pos);
+//              }
+//              break;
+//            case 3:
+//              if (!world->getContent(World::W(pos)) && world->isValidPosition(World::W(pos))) {
+//                return World::W(pos);
+//              }
+//              break;
+//            case 4:
+//              if (!world->getContent(World::SW(pos)) && world->isValidPosition(World::SE(pos))) {
+//                return World::SW(pos);
+//              }
+//              break;
+//            case 5:
+//              if (!world->getContent(World::SE(pos)) && world->isValidPosition(World::SE(pos))) {
+//                return World::SE(pos);
+//              }
+//              break;
+//          }
 //    auto side = world->getWorldSideSize() / 2;
 //    for (;;) {
 //      Point2D p = {Random::Range(-side, side), Random::Range(-side, side)};
